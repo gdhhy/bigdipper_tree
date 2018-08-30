@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<!--
+%c 输出日志信息所属的类的全名
+%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy-MM-dd HH:mm:ss }，输出类似：2002-10-18- 22：10：28
+%f 输出日志信息所属的类的类名
+%l 输出日志事件的发生位置，即输出日志信息的语句处于它所在的类的第几行
+%m 输出代码中指定的信息，如log(message)中的message
+%n 输出一个回车换行符，Windows平台为“rn”，Unix平台为“n”
+%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL。如果是调用debug()输出的，则为DEBUG，依此类推
+%r 输出自应用启动到输出该日志信息所耗费的毫秒数
+%t 输出产生该日志事件的线程名-->
+<log4j:configuration>
+
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{M-dd HH:mm:ss} %-5p %C:%L %x - %m%n"/>
+        </layout>
+
+    </appender>
+
+    <appender name="zcreate" class="org.apache.log4j.RollingFileAppender">
+        <!--only print DEBUG-->
+        <!--<param name="Threshold" value="DEBUG"/>-->
+        <param name="File" value="zcreate.log"/>
+        <param name="MaxFileSize" value="10000KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{M-dd HH:mm:ss} [%t] %-5p %C:%L - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="spring" class="org.apache.log4j.RollingFileAppender">
+        <!--only print DEBUG-->
+        <!--<param name="Threshold" value="DEBUG"/>-->
+        <param name="File" value="spring.log"/>
+        <param name="MaxFileSize" value="10000KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{M-dd HH:mm:ss} [%t] %-5p %C:%L - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="mybatis" class="org.apache.log4j.RollingFileAppender">
+        <!--only print DEBUG-->
+        <!--<param name="Threshold" value="DEBUG"/>-->
+        <param name="File" value="mybatis.log"/>
+        <param name="MaxFileSize" value="10000KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{M-dd HH:mm:ss} [%t] %-5p %C:%L - %m%n"/>
+        </layout>
+    </appender>
+
+    <category name="org.springframework">
+        <priority value="info"/>
+        <appender-ref ref="spring"/>
+    </category>
+    <category name="com.zcreate">
+        <priority value="debug"/>
+        <appender-ref ref="zcreate"/>
+    </category>
+    <category name="org.apache.ibatis.logging.commons.JakartaCommonsLoggingImpl">
+        <priority value="debug"/>
+        <appender-ref ref="mybatis"/>
+    </category>
+
+    <root>
+        <priority value="debug"/>
+        <appender-ref ref="console"/>
+        <!--<appender-ref ref="stdout"/>-->
+    </root>
+
+</log4j:configuration>

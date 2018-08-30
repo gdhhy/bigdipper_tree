@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zcreate.tree.dao.MemberMapper">
+    <cache eviction="LRU" readOnly="false" flushInterval="60000" size="10000"/>
+    <resultMap id="UserResult" type="com.zcreate.tree.pojo.Member">
+        <result column="member_id" jdbcType="INTEGER" property="memberId"/>
+        <result column="member_no" jdbcType="VARCHAR" property="memberNo"/>
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+        <result column="member_info" jdbcType="VARCHAR" property="memberInfo"/>
+        <result column="parent_no" jdbcType="VARCHAR" property="parentNo"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="child_total" jdbcType="INTEGER" property="childTotal"/>
+        <result column="child_depth" jdbcType="INTEGER" property="childDepth"/>
+        <result column="direct_count" jdbcType="INTEGER" property="directCount"/>
+    </resultMap>
+    <sql id="queryWhere">
+        <where>
+            <if test="param.memberNo!=null">AND member_no = #{param.memberNo:VARCHAR}</if>
+            <if test="param.realName!=null">AND real_name = #{param.realName:VARCHAR}</if>
+            <if test="param.phone!=null">AND phone = #{param.phone:VARCHAR}</if>
+            <if test="param.idCard!=null">AND id_card = #{param.idCard:VARCHAR}</if>
+            <if test="param.parentNo!=null">AND parent_no = #{param.parentNo:INTEGER}</if>
+            <if test="param.threeThirty==true">AND level>2 and child_total>=30</if>
+        </where>
+    </sql>
+    <select id="getMemberCount" resultType="int" parameterType="java.util.Map">
+        SELECT count(*) FROM member
+        <include refid="queryWhere"/>
+    </select>
+    <select id="selectMember" resultMap="UserResult" parameterType="java.util.Map">
+        SELECT
+        member_id, member_no, real_name, id_card, phone, member_info, parent_no, level, child_total, child_depth, direct_count
+        FROM member
+       <include refid="queryWhere"/>
+        <choose>
+            <when test="param.start>0 and param.length >0">
+                limit #{param.start:INTEGER},#{param.length:INTEGER}
+            </when>
+            <when test="param.length >0">
+                limit #{param.length:INTEGER}
+            </when>
+            <otherwise>
+                limit 1000
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

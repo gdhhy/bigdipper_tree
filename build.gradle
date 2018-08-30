@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'com.zcreate'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+repositories {
+    flatDir {
+        // 先看下build.gradle文件所在目录下的 libs目录中有没有
+        dirs 'lib'
+    }
+    /* maven {
+         url "http://192.168.1.61:8081/nexus/content/repositories/public/"
+     }*/
+    maven {
+        //如果目录中木有，则找url对应的maven仓库，下面是阿里的maven仓库，速度杠杆的。
+        url "http://maven.aliyun.com/nexus/content/groups/public/"
+    }
+    maven { url 'https://jitpack.io' }
+    mavenCentral()
+}
+
+task copyJars(type: Copy) {
+    from configurations.runtime
+    into 'lib' // 目标位置
+}
+dependencies {
+    //http://www.mvnrepository.com
+    compile 'org.mybatis:mybatis:3.4.2', 'log4j:log4j:1.2.17', 'jstl:jstl:1.2', 'javax.servlet:javax.servlet-api:3.1.0'
+    compile group: 'org.springframework', name: 'spring-context', version: '4.3.7.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.7.RELEASE'
+
+    compile group: 'org.springframework', name: 'spring-beans', version: '4.3.7.RELEASE'
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.3.7.RELEASE'
+    compile group: 'org.springframework', name: 'spring-web', version: '4.3.7.RELEASE'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.7.RELEASE'
+    compile group: 'org.springframework', name: 'spring-test', version: '4.3.7.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: '4.2.2.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '4.2.2.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '4.2.2.RELEASE'
+    compile 'com.h2database:h2:1.4.197'
+    compile group: 'org.mybatis', name: 'mybatis-spring', version: '1.3.1'
+    compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    // compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.5'
+
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.8.9'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.8.9'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.3'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.24'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
